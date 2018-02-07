@@ -1358,11 +1358,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     ### Opens a browser page to the software's repository
     def openAbout(self):
-        webbrowser.open('https://github.com/Piersees/NetAppControl')
+        webbrowser.open('https://github.com/Penmast/Chameleon')
 
     ### Opens a browser page to the software's repository's readme
     def openHelp(self):
-        webbrowser.open('https://github.com/Piersees/NetAppControl/blob/master/README.md')
+        webbrowser.open('https://github.com/Penmast/Chameleon/blob/master/README.md')
 
     def displayPacketRatio(self, wapp, ratio):
         try:
