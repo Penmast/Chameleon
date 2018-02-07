@@ -23,6 +23,7 @@ import sys
 sys.path.append("ui")
 from wapp import WappWidget
 from gapp import GappWidget
+from hostsinchannelwidget import hostsInChannelWidget
 from speedtestwidget import SpeedTestWidget
 from VPNstatusWidget import VPNstatusWidget
 from Wifi_stat import wifi_info
@@ -34,6 +35,13 @@ import NetworkScan
 from BandWidth import getBandWidth, getBandWidthDiff
 import openvpn
 from Stats import GetPacketStats, GetAppStats
+import ctypes, sys
+
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
     bandWidthSig = QtCore.pyqtSignal(int,int,str)
@@ -188,6 +196,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             "}"
             "QWidget#bwTabSpeedtest QLabel{"
             "color: rgb(41, 107, 116);"
+            "}"
+            "QWidget#home_tab QLabel{"
+            "color: rgb(41, 107, 116);"
             "}")
 
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.West)
@@ -278,8 +289,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.incomingConnectionsModel = self.createConnectionModel()
         self.incomingConnectionsList.setModel(self.incomingConnectionsModel)
 
-        #self.threadIncomingConnections = threading.Thread(target=self.manageConnectionsList)
-        #self.threadIncomingConnections.start()
+        self.threadIncomingConnections = threading.Thread(target=self.manageConnectionsList)
+        self.threadIncomingConnections.start()
 
         self.incomingConnectionSig.connect(self.resetConnectionsList)
 
@@ -316,30 +327,15 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         self.datapie = wifi_info()
 
-        self.totnumchannels = 0
         self.labelsla = []
         self.chSizes = []
 
-        try:
-            for keys, values in self.datapie.items():
-                self.labelsla.append(keys)
-                self.totnumchannels = self.totnumchannels + values
+        for keys, values in self.datapie.items():
+            self.labelsla.append(keys)
+            self.chSizes.append(len(values))
 
-            for keys, values in self.datapie.items():
-                #siz = (values/self.totnumchannels)*100
-                self.chSizes.append(values)
-        except(AttributeError):
-            print("Error getting channels data.")
+        self.chAxis = self.chFigure.add_subplot(111, aspect=1.0, title='Hosts By Channel')
 
-        #self.chExplode = (0 ,0 ,0.1)
-
-
-
-        self.chAxis = self.chFigure.add_subplot(111, aspect=1.0)
-
-        #self.chAxis.pie(self.chSizes, explode=self.chExplode, labels=self.labelsla, autopct='%1.1f%%')
-        # self.chAxis.pie(self.chSizes, labels=self.labelsla, autopct='%1.1f%%')
-        # self.chCanvas.draw()
         def make_autopct(values):
             def my_autopct(pct):
                 total = sum(values)
@@ -347,8 +343,31 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 return '{p:.2f}%  ({v:d})'.format(p=pct,v=val)
             return my_autopct
 
-        #self.chAxis.pie(self.chSizes, explode=self.chExplode, labels=self.labelsla, autopct='%1.1f%%')
-        self.chAxis.pie(self.chSizes, labels=self.labelsla, autopct=make_autopct(self.chSizes))
+
+        wedges, plt_labels, wtv = self.chAxis.pie(self.chSizes, labels=self.labelsla, autopct=make_autopct(self.chSizes))
+
+        def make_picker(self, fig, wedges):
+
+            def onclick(event):
+                wedge = event.artist
+                label = wedge.get_label()
+                for key, value in self.datapie.items():
+                    if label == key:
+                        print("CHECKED KEYS SENT VALUES")
+                        print(key)
+                        print(value)
+                        self.showHosts(value,label)
+
+
+        # Make wedges selectable
+            for wedge in wedges:
+                wedge.set_picker(True)
+
+            fig.canvas.mpl_connect('pick_event', onclick)
+
+
+        make_picker(self, self.chFigure, wedges)
+
         self.chCanvas.draw()
 
 
@@ -691,13 +710,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
 
             except(UnboundLocalError):
-                msg = QtWidgets.QMessageBox()
-                msg.setText("Invalid openVPN certificate")
-                msg.exec_()
-            except ValueError as e:
-                msg = QtWidgets.QMessageBox()
-                msg.setText(e)
-                msg.exec_()
+                pass
         except:
             print("no certificate")
 
@@ -816,6 +829,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         for key in self.dpacketsData:
             dic.append(self.dpacketsData[key])
         return dic
+
+    def showHosts(self, hosts, channel):
+        self.hostlistPopUp = hostsInChannelWidget()
+        self.hostlistPopUp.fillList(hosts,channel)
+        self.hostlistPopUp.show()
 
     ### Opens a file select dialog to select an open VPN certificate
     def selectVPNcertificate(self):
@@ -1361,11 +1379,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     ### Opens a browser page to the software's repository
     def openAbout(self):
-        webbrowser.open('https://github.com/Penmast/Chameleon')
+        webbrowser.open('https://github.com/Piersees/NetAppControl')
 
     ### Opens a browser page to the software's repository's readme
     def openHelp(self):
-        webbrowser.open('https://github.com/Penmast/Chameleon/blob/master/README.md')
+        webbrowser.open('https://github.com/Piersees/NetAppControl/blob/master/README.md')
 
     def displayPacketRatio(self, wapp, ratio):
         try:
@@ -1409,7 +1427,12 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    ui = Ui_MainWindow()
-    ui.show()
-    sys.exit(app.exec_())
+    print(sys.executable)
+    if is_admin() or "python.exe" in sys.executable:
+        app = QtWidgets.QApplication(sys.argv)
+        ui = Ui_MainWindow()
+        ui.show()
+        sys.exit(app.exec_())
+    else:
+        # Re-run the program with admin rights
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, "", None, 1)

@@ -10,6 +10,7 @@ Created on Tue Jan 30 14:04:55 2018
 ##############################################
 
 import subprocess
+import time
 
 def orderByChannel(dic):
     res = {}
@@ -22,9 +23,10 @@ def orderByChannel(dic):
             if i.isdigit():
                 canal = i
         if "Channel "+str(canal) in res:
-            res["Channel "+str(canal)] = res["Channel "+str(canal)] +1
+            res["Channel "+str(canal)][key] = percent
+            pass
         else:
-            res["Channel "+str(canal)] = 1
+            res["Channel "+str(canal)] = {key:percent}
 
     return res
 
@@ -37,7 +39,7 @@ def wifi_info():
     except subprocess.CalledProcessError:
         print ("error")
         return "Wifi disabled check" #return an error messag
-    
+
     res = []
     res= available.split("\n")
 
@@ -60,4 +62,3 @@ def wifi_info():
 if __name__ == "__main__":
     dic = wifi_info()
     print(dic)
-

@@ -66,6 +66,7 @@ class WappWidget(appAbstract):
                 line = action.split(',')
                 try:
                     dic = {'processName':line[0], 'actionType':line[1], 'durationType':line[2], 'durationTime':line[3]}
+
                     if ( not (dic['processName'] == self.processName and dic['actionType'] == 'security' ) ):
                         insertData.append(action)
 
