@@ -9,6 +9,8 @@ The project is build using python 3.6.
 
 ### Prerequisites
 
+**Note** Due to a compatibility problem in scapy, this software doesn't run on any windows version that is earlier than Windows 8.
+
 To run the project, you will need 2 third-parties sofware:
 
 - openvpn with the TAP Interface ( https://openvpn.net/index.php/open-source/downloads.html)
@@ -16,6 +18,8 @@ To run the project, you will need 2 third-parties sofware:
 - winpcap (https://www.winpcap.org/install/)
 
 **Note**: if you have wireshark installed, you probably already have winpcap on yout computer
+
+- Nmap (https://nmap.org/download.html) installed is also used, but only for one function of the project, and can run without it
 
 
 ### Installing
@@ -26,11 +30,11 @@ Libraries required:
 pip install pyQT5, PyQTchart, psutil, matplotlib, requests, numpy, webbrowser, win32core, scapy-python3
 ```
 
-There is also a dll that is used in this project (injected into processes to change their IP), but for some reasons it seems that it has to be recompiled on each computer.
+There is also a dll that is used in this project (injected into processes to change their IP). It works only on some computers, so if for some reasons it doesn't work on your computer, it has to be recompiled.
 
 So if you have Visual studio, open the project which is in the DLL folder, compile it (DEBUG configuration seems to be more stable), and move the created Dll into the Network Folder. Keep the original name.
 
-To run the programm, launch chameleon.py.
+To run the programm, launch chameleon.py. No arguments needed.
 
 ## How to use
 
@@ -39,6 +43,9 @@ You just have to give it the ovpn file used to connect to the server, and your c
 
 Then, you can go to the 2nd tab and select processes that should use the vpn using the lock button (only processes using internet are displayed).
 Be careful which process you select, as there is risks of crashing the system if you choose a vital one.
+
+If the injection suceeded, the program will display a popup saying "Ip changed". 
+You can stop the ip change using the same lock button, or by leaving the program.
 
 ## Deployment
 
@@ -59,6 +66,8 @@ python setup.py build
 * MHook : https://github.com/martona/mhook
 
 ## Authors
+
+We are a team of French Engineering students, and we built this software for a school project.
 
 * **Alazay Quentin**
 * **David Deray**
