@@ -1,0 +1,6 @@
+Network/__pycache__/*
+ui/__pycache__/*
+.idea/workspace.xml
+venv
+venv1
+build/*
