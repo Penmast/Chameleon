@@ -34,7 +34,7 @@ To run the programm, launch chameleon.py.
 
 ## How to use
 
-First, you have to launch the openvpn server from the app, using the last tab. 
+First, you have to launch the openvpn server from the app, using the last tab.
 You just have to give it the ovpn file used to connect to the server, and your credentials. The vpn won't be the main Network Adapter, so even if vpn is enabled after this, no application will use it.
 
 Then, you can go to the 2nd tab and select processes that should use the vpn using the lock button (only processes using internet are displayed).
@@ -60,11 +60,11 @@ python setup.py build
 
 ## Authors
 
-* **Alazay Quentin** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **David Deray** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Pierre Haykal** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Megane Pau** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **AitZaid Ismail** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Alazay Quentin**
+* **David Deray**
+* **Pierre Haykal**
+* **Megane Pau**
+* **AitZaid Ismail**
 
 ## License
 
@@ -74,4 +74,3 @@ This project is licensed under the MIT License
 
 Some inspiration, for the Dll for example:
 	* falahati : https://github.com/falahati/NetworkAdapterSelector
-
