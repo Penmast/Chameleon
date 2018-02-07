@@ -320,13 +320,16 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.labelsla = []
         self.chSizes = []
 
-        for keys, values in self.datapie.items():
-            self.labelsla.append(keys)
-            self.totnumchannels = self.totnumchannels + values
+        try:
+            for keys, values in self.datapie.items():
+                self.labelsla.append(keys)
+                self.totnumchannels = self.totnumchannels + values
 
-        for keys, values in self.datapie.items():
-            #siz = (values/self.totnumchannels)*100
-            self.chSizes.append(values)
+            for keys, values in self.datapie.items():
+                #siz = (values/self.totnumchannels)*100
+                self.chSizes.append(values)
+        except(AttributeError):
+            print("Error getting channels data.")
 
         #self.chExplode = (0 ,0 ,0.1)
 
