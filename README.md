@@ -4,7 +4,11 @@ This project is a Windows's python based application that allows a user to monit
 
 ## Getting Started
 
-The project is build using python 3.6.
+The project is build using python 3.6. It requires admin rights to work well.
+
+
+The program uses a ovpn file to connect to the openVPN server, but the route are made so the vpn isn't the primary NIC choosen by windows, even if the route is available and works.
+Then, a custom built Dll is injected in the desired process to bind the packets, which makes the injected process use the VPN connection, while the others still uses the normal connection.
 
 
 ### Prerequisites
@@ -63,6 +67,7 @@ python setup.py build
 
 ## Built With
 
+* Python
 * MHook : https://github.com/martona/mhook
 
 ## Authors
