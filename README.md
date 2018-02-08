@@ -36,9 +36,7 @@ Libraries required:
 pip install pyQT5, PyQTchart, psutil, matplotlib, requests, numpy, webbrowser, win32core, scapy-python3
 ```
 
-There is also a dll that is used in this project (injected into processes to change their IP). It works only on some computers, so if for some reasons it doesn't work on your computer, it has to be recompiled.
-
-So if you have Visual studio, open the project which is in the DLL folder, compile it (DEBUG configuration seems to be more stable), and move the created Dll into the Network Folder. Keep the original name.
+There is also a dll that is used in this project (injected into processes to change their IP).
 
 To run the programm, launch chameleon.py. No arguments needed.
 
