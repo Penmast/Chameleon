@@ -2,7 +2,7 @@
 
 This project is a Windows's python based application that allows a user to monitor and manage it's network, as well as using a vpn only for selected processes
 
-![Screenshot](IPChange.png "Screenshot")
+![Screenshot](IPChange.PNG "Screenshot")
 
 ## Getting Started
 
